@@ -4,4 +4,4 @@ __pycache__/
 .cache/
 .wheelhouses/
 .tox/
-.vscode/
+# .vscode/
