@@ -2,11 +2,11 @@ import pytest
 
 
 def test_parameterization(letter):
-    print("\n   Running test_parameterization with {}".format(letter))
+    print(f"\n   Running test_parameterization with {letter}")
 
 
 def test_modes(mode):
-    print("\n   Running test_modes with {}".format(mode))
+    print(f"\n   Running test_modes with {mode}")
 
 
 @pytest.fixture(params=["a", "b", "c", "d", "e"])

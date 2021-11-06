@@ -22,8 +22,8 @@
         * For example, if you wanted to assert that x is greater than zero, and divisible by 2, in a function that is called by one of your test cases (but is not inside a python test case function!) consider something like:
 
         ```
-        assert (x > 0), "X should be > 0, but is {}".format(x)
-        assert not (x % 2), "X should be divisible by 2, but is {}".format(x)
+        assert (x > 0), f"X should be > 0, but is {x}"
+        assert not (x % 2), f"X should be divisible by 2, but is {x}"
         ```
 
         (But if possible, do all your assertions inside test cases, so that PyTest can document their failure reasons and context for you!)

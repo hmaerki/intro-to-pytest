@@ -6,7 +6,7 @@ def test_with_data_fixture(one_fixture):
     PyTest finds the fixture whose name matches the argument,
     calls it, and passes that return value into our test case:
     """
-    print("\nRunning test_with_data_fixture: {}".format(one_fixture))
+    print(f"\nRunning test_with_data_fixture: {one_fixture}")
     assert one_fixture == 1
 
 

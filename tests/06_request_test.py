@@ -13,6 +13,6 @@ def introspective_fixture(request):
     "requesting" test case
     """
     print("\n\nintrospective_fixture:")
-    print("...Called at {}-level scope".format(request.scope))
-    print("   ...In the {} module".format(request.module))
-    print("      ...On the {} node".format(request.node))
+    print(f"...Called at {request.scope}-level scope")
+    print(f"   ...In the {request.module} module")
+    print(f"      ...On the {request.node} node")

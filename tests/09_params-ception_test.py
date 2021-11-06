@@ -23,4 +23,4 @@ def test_fixtureception(letters_fixture, numbers_fixture):
     """
     coordinate = letters_fixture + str(numbers_fixture)
 
-    print('\nRunning test_fixtureception with "{}"'.format(coordinate))
+    print(f'\nRunning test_fixtureception with "{coordinate}"')

@@ -7,7 +7,7 @@ def test_div_zero_exception():
     """
     with pytest.raises(ZeroDivisionError):
         x = 1 / 0
-        print("1/0 = {}".format(x))
+        print(f"1/0 = {x}")
 
 
 def test_keyerror_details():
@@ -18,9 +18,9 @@ def test_keyerror_details():
 
     with pytest.raises(KeyError) as ke:
         baz = my_map["baz"]
-        print("Found Baz: {}".format(baz))
+        print(f"Found Baz: {baz}")
 
-    print("\n(Raised: {})".format(ke))
+    print(f"\n(Raised: {ke})")
 
 
 def test_approximate_matches():

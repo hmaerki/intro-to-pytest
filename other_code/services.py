@@ -37,7 +37,7 @@ def count_service(query_parameters):
 
     count = len(data)
 
-    print("Found {} result(s)!".format(count))
+    print(f"Found {count} result(s)!")
     return count
 
 

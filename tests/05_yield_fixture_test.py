@@ -2,7 +2,7 @@ import pytest
 
 
 def test_with_yield_fixture(yield_fixture):
-    print("\n    Running test_with_yield_fixture: {}".format(yield_fixture))
+    print(f"\n    Running test_with_yield_fixture: {yield_fixture}")
     assert "foo" in yield_fixture
 
 
