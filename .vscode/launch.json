@@ -23,7 +23,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "pytest",
+            "name": "Pytest: all",
             "type": "python",
             "request": "launch",
             "module": "pytest",
@@ -34,7 +34,20 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "pytest tests/60_dependency_test.py",
+            "name": "Pytest: current file",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${relativeFile}",
+                "-s",
+                "-v"
+            ],
+            "justMyCode": false,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Pytest: tests/60_dependency_test.py",
             "type": "python",
             "request": "launch",
             "module": "pytest",
