@@ -13,7 +13,7 @@
                 "debug-test"
             ],
             "console": "integratedTerminal",
-            "justMyCode": false
+            "justMyCode": true
         },
         {
             "name": "Python: Current File",
@@ -30,7 +30,7 @@
             "args": [
                 "tests"
             ],
-            "justMyCode": false,
+            "justMyCode": true,
             "console": "integratedTerminal"
         },
         {
@@ -43,7 +43,7 @@
                 "-s",
                 "-v"
             ],
-            "justMyCode": false,
+            "justMyCode": true,
             "console": "integratedTerminal"
         },
         {
@@ -55,7 +55,7 @@
                 "tests/60_dependency_test.py",
                 "-sv"
             ],
-            "justMyCode": false,
+            "justMyCode": true,
             "console": "integratedTerminal"
         }
     ]

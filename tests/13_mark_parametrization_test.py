@@ -14,7 +14,7 @@ def test_dimensions(x, y):
     """
     mark.parametrize can even unpack tuples into named parameters
     """
-    print(f"\nRunning test_coordinates with {x}x{y}")
+    print(f"\nRunning test_dimensions with {x}x{y}")
 
 @pytest.mark.parametrize("mode", [1, 2, 3], ids=['foo', 'bar', 'baz'])
 def test_modes(mode):
