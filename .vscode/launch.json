@@ -57,6 +57,20 @@
             ],
             "justMyCode": true,
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Pytest: tests/91_smoke_test.py::test_letters_2[d]",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                // "tests/91_smoke_test.py::test_letters_2[d]",
+                "tests/91_smoke_test.py::test_letters_2",
+                "-sv",
+                "-m smoke"
+            ],
+            "justMyCode": false,
+            "console": "integratedTerminal"
         }
     ]
 }
