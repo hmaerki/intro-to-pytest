@@ -27,6 +27,17 @@ class ParameterX:
     identifier_note: str = None
     smoke: bool = False
 
+    def __post_init__(self):
+        """
+        You may check for correct datatypes here.
+        Or use pydantic which does this for you.
+        """
+        assert isinstance(self.a, int)
+        assert isinstance(self.b, int)
+        assert isinstance(self.expected_result, int)
+        assert isinstance(self.identifier_note, (type(None), str))
+        assert isinstance(self.smoke, bool)
+
     @property
     def identifier(self) -> str:
         """
