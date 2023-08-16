@@ -6,11 +6,21 @@ a smoke test.
 
 Demonstrate different way on how to use a smoke parameter.
 """
+from typing import List
 import pytest
 
 
-@pytest.mark.parametrize("letter", ["a", "b", "c", "d", "e"])
+@pytest.mark.parametrize("letter", ["a", "b", "c"])
 def test_letters_1(letter):
+    print(f"\n   Running test_parameterization with {letter}")
+
+
+@pytest.mark.smoke
+@pytest.mark.parametrize(
+    "letter",
+    ["a", "b", "c"],
+)
+def test_letters_2(letter):
     print(f"\n   Running test_parameterization with {letter}")
 
 
@@ -24,41 +34,42 @@ def test_letters_1(letter):
         "e",
     ],
 )
-def test_letters_2(letter):
-    print(f"\n   Running test_parameterization with {letter}")
-
-
-@pytest.mark.smoke
-@pytest.mark.parametrize(
-    "letter",
-    ["a", "b", "c", "d", "e"],
-)
 def test_letters_3(letter):
     print(f"\n   Running test_parameterization with {letter}")
 
 
-def fumigate(params: list, first=True, last=False) -> list:
-    '''
-    This functions adds the smoke paramter to first/last element.
-    '''
-    set_index = set()
-    if first:
-        set_index.add(0)
-    if last:
-        set_index.add(len(params)-1)
+def add_smoke(params: list, test_idx: List[int] = None) -> list:
+    """
+    This functions adds the smoke parameter to selected tests.
+    test_idx >= 0: Add smoke to 'params[test_idx]'.
+    test_idx < 0: Add smoke to 'params[test_idx-len]'.
+    """
 
     def inner():
+        size = len(params)
         for i, param in enumerate(params):
-            if i in set_index:
-                yield pytest.param(param, marks=pytest.mark.smoke)
-                continue
-            yield param
+            marks = ()
+            if i in test_idx:
+                marks = pytest.mark.smoke
+            i_reverse = i - size
+            if i_reverse in test_idx:
+                marks = pytest.mark.smoke
+            yield pytest.param(param, marks=marks)
 
-    return inner()
+    return list(inner())
+
 
 @pytest.mark.parametrize(
     "letter",
-    fumigate(["a", "b", "c", "d", "e"], first=True, last=True),
+    add_smoke(["a", "b", "c"], test_idx=(0, -1)),
 )
 def test_letters_4(letter):
+    print(f"\n   Running test_parameterization with {letter}")
+
+
+@pytest.mark.parametrize(
+    "letter",
+    add_smoke(["a", "b", "c", "d", "e"], test_idx=(1, -2)),
+)
+def test_letters_5(letter):
     print(f"\n   Running test_parameterization with {letter}")
