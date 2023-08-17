@@ -6,8 +6,30 @@ a smoke test.
 
 Demonstrate different way on how to use a smoke parameter.
 """
-from typing import List, Callable, Any, Tuple, Iterator
+import logging
+from typing import List, Callable, Any, Tuple, Iterator, Union
+from collections import abc
+
 import pytest
+
+logger = logging.getLogger(__file__)
+
+
+def _pytest_param_wrapper(param, marks, identifier=None):
+    def is_iterable(param: Any) -> bool:
+        """
+        This is somehow the counterpart to
+        https://docs.python.org/3/tutorial/controlflow.html#unpacking-argument-lists
+        """
+        if isinstance(param, abc.Iterable):
+            if isinstance(param, str):
+                return False
+            return True
+        return False
+
+    if is_iterable(param):
+        return pytest.param(*param, marks=marks, id=identifier)
+    return pytest.param(param, marks=marks, id=identifier)
 
 
 def add_smoke_by_index(params: list, list_smoke_idx: List[int] = None) -> Iterator[Any]:
@@ -26,7 +48,30 @@ def add_smoke_by_index(params: list, list_smoke_idx: List[int] = None) -> Iterat
         i_reverse = i - size
         if i_reverse in list_smoke_idx:
             marks = pytest.mark.smoke
-        yield pytest.param(*param, marks=marks)
+        yield _pytest_param_wrapper(param, marks=marks)
+
+
+def add_smoke_by_values(
+    params: list,
+    smoke_params: Union[List, Tuple],
+) -> Iterator[Any]:
+    """
+    This functions adds the smoke parameter to the 'params' in 'smoke_params'.
+    """
+    assert isinstance(smoke_params, (list, tuple))
+
+    smoke_params = smoke_params.copy()
+
+    for param in params:
+        try:
+            smoke_params.remove(param)
+            yield _pytest_param_wrapper(param, marks=pytest.mark.smoke)
+        except ValueError:
+            yield _pytest_param_wrapper(param, marks=())
+
+    if len(smoke_params) > 0:
+        err = f"These 'smoke_params' have been provided {sorted(smoke_params)!r} but are not in the list of the given test parameters {params!r}!"
+        raise AttributeError(err)
 
 
 def add_smoke_by_callback(
@@ -42,8 +87,8 @@ def add_smoke_by_callback(
     if callback is not None:
         for param in params:
             smoke = callback(param)
-            yield pytest.param(
-                *param,
+            yield _pytest_param_wrapper(
+                param,
                 marks=pytest.mark.smoke if smoke else (),
             )
         return
@@ -51,10 +96,12 @@ def add_smoke_by_callback(
     if callback_with_id is not None:
         for param in params:
             smoke, identifier = callback_with_id(param)
-            yield pytest.param(
-                *param,
+            assert isinstance(smoke, bool)
+            assert isinstance(identifier, str)
+            yield _pytest_param_wrapper(
+                param,
                 marks=pytest.mark.smoke if smoke else (),
-                id=identifier,
+                identifier=identifier,
             )
         return
 
@@ -119,7 +166,7 @@ def test_letters_6(letter):
 
 def get_smoke_with_id(param: str) -> Tuple[bool, str]:
     smoke = param in ("b", "d")
-    identifier = param
+    identifier = f"{param}"
     if smoke:
         identifier += "(smoke)"
     return smoke, identifier
@@ -134,11 +181,26 @@ def get_smoke_with_id(param: str) -> Tuple[bool, str]:
 def test_letters_7(letter):
     print(f"\n   Running test_parameterization with {letter}")
 
+
+@pytest.mark.parametrize(
+    "number",
+    add_smoke_by_callback([1, 2, 3, 4, 5], callback_with_id=get_smoke_with_id),
+)
+def test_numbers_8(number):
+    print(f"\n   Running test_parameterization with {number}")
+
+
 @pytest.mark.parametrize(
     "x, y",
-    add_smoke_by_index(
-        [(1, 2), (3, 4), (5, 6)], list_smoke_idx=(0, -1)
-    ),
+    add_smoke_by_index([(1, 2), (3, 4), (5, 6)], list_smoke_idx=(0, -1)),
 )
-def test_letters_8(x, y):
+def test_letters_9(x: int, y: int):
+    print(f"\n   Running test_parameterization with x={x}, y={y}")
+
+
+@pytest.mark.parametrize(
+    "x, y",
+    add_smoke_by_values([(1, 2), (3, 4), (5, 6)], smoke_params=[(3, 4)]),
+)
+def test_letters_9(x: int, y: int):
     print(f"\n   Running test_parameterization with x={x}, y={y}")
