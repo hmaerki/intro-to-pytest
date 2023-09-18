@@ -1,4 +1,11 @@
-from typing import Iterator, List, Protocol
+try:
+    # Python 3.8 and newer
+    from typing import Protocol
+except:
+    # Python 3.7
+    from typing_extensions import Protocol
+
+from typing import Iterator, List, Optional
 
 
 import pytest
@@ -17,14 +24,14 @@ class ParamProtocol(Protocol):
         ...
 
     @property
-    def id_note(self) -> str | None:
+    def id_note(self) -> Optional[str]:
         '''
         Add a note if something is very special about this test.
         '''
         ...
 
     @property
-    def marks(self) -> List[pytest.Mark] | None:
+    def marks(self) -> Optional[List[pytest.Mark]]:
         '''
         Marks to be applied to the test
         '''

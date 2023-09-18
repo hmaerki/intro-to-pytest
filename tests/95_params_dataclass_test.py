@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import itertools
 
 from dataclasses import dataclass
@@ -14,7 +14,7 @@ class ParameterX(ParamProtocol):
     expected_result: int
     id_note: str = None
     "This implements 'ParamProtocol'"
-    marks: List[pytest.MarkDecorator] | None = None
+    marks: Optional[List[pytest.MarkDecorator]] = None
     "This implements 'ParamProtocol'"
 
     @property
@@ -64,7 +64,7 @@ class ParameterCombined(ParamProtocol):
     x: ParameterX
 
     @property
-    def marks(self) -> List[pytest.MarkDecorator] | None:
+    def marks(self) -> Optional[List[pytest.MarkDecorator]]:
         '''
         We may add/remove markers to combined parameters.
         This is not possible using two more 'pytest.mark.param'!
@@ -88,7 +88,7 @@ class ParameterCombined(ParamProtocol):
 
 
 @dataclass_param(params=ParameterCombined.product(list_x=params_x, channels=[0, 1]))
-def test_y(param: ParameterCombined):
+def test_combined(param: ParameterCombined):
     """
     Negative: More code to type.
     Positive: Code is readable without knowing pytest internals.
